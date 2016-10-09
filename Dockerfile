@@ -44,3 +44,16 @@ RUN apt-get install -y --no-install-recommends\
     lib32ncurses5-dev \
     lib32readline6-dev \
     lib32z1-dev
+
+# Install additional useful stuff
+RUN apt-get install -y --no-install-recommends \
+    android-tools-adb \
+    android-tools-adbd \
+    android-tools-fastboot \
+    android-tools-fsutils \
+    bash-completion \
+    ccache \
+    mc \
+    nano \
+    sudo \
+    wget
