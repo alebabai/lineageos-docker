@@ -7,6 +7,7 @@ ARG user="docker-cm"
 ARG version="0.0-AURORA"
 ARG workdir="android"
 
+# Metainformation
 LABEL description=$description \
       version=$version
 
@@ -55,5 +56,6 @@ RUN apt-get install -y --no-install-recommends \
     ccache \
     mc \
     nano \
+    ssh \
     sudo \
     wget
