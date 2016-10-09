@@ -1,8 +1,11 @@
 FROM ubuntu:16.04
 MAINTAINER Alexander Babai <aliaksandr.babai@gmail.com>
 
+ENV DEBIAN_FRONTEND noninteractive
+
 # Args defenition
 ARG description="Docker image with CM build environment"
+ARG group="users"
 ARG user="docker-cm"
 ARG version="0.0-AURORA"
 ARG workdir="android"
@@ -59,3 +62,15 @@ RUN apt-get install -y --no-install-recommends \
     ssh \
     sudo \
     wget
+
+# Add new group, user and setup workdir
+RUN groupadd -f $group && \
+    useradd -m -g $group -s /bin/bash $user && \
+    echo "$user ALL=NOPASSWD: ALL" > /etc/sudoers.d/$group && \
+    mkdir -p /home/$user/bin && \
+    curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
+    chmod a+x /home/$user/bin/repo && \
+    chown -R $user:$group /home/$user
+
+USER $user
+WORKDIR $workdir
