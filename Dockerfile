@@ -62,14 +62,23 @@ RUN apt-get install -y --no-install-recommends \
     sudo \
     wget
 
-# Add new group, user and setup workdir
+# Add new user and setup workdir
 RUN useradd -ms /bin/bash $user && \
     echo "$user ALL=NOPASSWD: ALL" > /etc/sudoers.d/$user && \
     mkdir -p /home/$user/bin && \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
     chmod a+x /home/$user/bin/repo && \
-    mkdir -p /home/$user/$workdir && \
+    mkdir -p /home/$user/$workdir/.ccache && \
+    mkdir -p /home/$user/$workdir/out && \
     chown -R $user:$user /home/$user
 
+# Initialize environment variables
+ADD init-env-variables.sh /home/$user/init-env-variables.sh
+RUN echo ". ~/init-env-variables.sh" >> /home/$user/.profile
+
+VOLUME /home/$user/android
+VOLUME /home/$user/android/.ccache
+VOLUME /home/$user/android/out
+
 USER $user
-WORKDIR ~/$workdir
+WORKDIR /home/$user/$workdir
