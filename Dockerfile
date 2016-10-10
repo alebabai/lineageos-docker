@@ -5,7 +5,6 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Args defenition
 ARG description="Docker image with CM build environment"
-ARG group="users"
 ARG user="docker-cm"
 ARG version="0.0-AURORA"
 ARG workdir="android"
@@ -64,14 +63,13 @@ RUN apt-get install -y --no-install-recommends \
     wget
 
 # Add new group, user and setup workdir
-RUN groupadd -f $group && \
-    useradd -m -g $group -s /bin/bash $user && \
-    echo "$user ALL=NOPASSWD: ALL" > /etc/sudoers.d/$group && \
+RUN useradd -ms /bin/bash $user && \
+    echo "$user ALL=NOPASSWD: ALL" > /etc/sudoers.d/$user && \
     mkdir -p /home/$user/bin && \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
     chmod a+x /home/$user/bin/repo && \
     mkdir -p /home/$user/$workdir && \
-    chown -R $user:$group /home/$user
+    chown -R $user:$user /home/$user
 
 USER $user
 WORKDIR ~/$workdir
