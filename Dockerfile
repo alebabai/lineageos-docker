@@ -70,7 +70,8 @@ RUN groupadd -f $group && \
     mkdir -p /home/$user/bin && \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
     chmod a+x /home/$user/bin/repo && \
+    mkdir -p /home/$user/$workdir && \
     chown -R $user:$group /home/$user
 
 USER $user
-WORKDIR $workdir
+WORKDIR ~/$workdir
