@@ -5,10 +5,11 @@ ENV DEBIAN_FRONTEND noninteractive
 
 # Args defenition
 ARG description="Docker image with CM build environment"
+ARG external_dir="include"
+ARG internal_dir=".init-cm"
 ARG user="docker-cm"
 ARG version="0.0-AURORA"
 ARG workdir="android"
-ARG scripts_dir=".init-cm"
 
 # Metainformation
 LABEL description=$description \
@@ -64,21 +65,21 @@ RUN apt-get install -y --no-install-recommends \
     sudo \
     wget
 
-# Add new user and setup workdir
+# Add new user
 RUN useradd -ms /bin/bash $user && \
-    echo "$user ALL=NOPASSWD: ALL" > /etc/sudoers.d/$user && \
-    mkdir -p /home/$user/bin && \
-    curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
-    chmod a+x /home/$user/bin/repo && \
-    mkdir -p /home/$user/$scripts_dir && \
-    mkdir -p /home/$user/$workdir/.ccache && \
-    mkdir -p /home/$user/$workdir/out && \
-    chown -R $user:$user /home/$user
+    echo "$user ALL=NOPASSWD: ALL" > /etc/sudoers.d/$user
 
 # Initialize environment
-ADD include /home/$user/$scripts_dir
-RUN echo ". ~/$scripts_dir/init-environment.sh" >> /home/$user/.profile
+ADD $external_dir /home/$user/$internal_dir
+RUN mkdir -p /home/$user/bin && \
+    curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
+    chmod a+x /home/$user/bin/repo && \
+    mkdir -p /home/$user/$workdir/.ccache && \
+    mkdir -p /home/$user/$workdir/out && \
+    chown -R $user:$user /home/$user && \
+    echo ". ~/$internal_dir/init-environment.sh" >> /home/$user/.profile
 
+# Volumes defenition
 VOLUME /home/$user/android
 VOLUME /home/$user/android/.ccache
 VOLUME /home/$user/android/out
