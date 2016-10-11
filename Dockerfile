@@ -8,6 +8,7 @@ ARG description="Docker image with CM build environment"
 ARG user="docker-cm"
 ARG version="0.0-AURORA"
 ARG workdir="android"
+ARG scripts_dir=".init-cm"
 
 # Metainformation
 LABEL description=$description \
@@ -58,6 +59,7 @@ RUN apt-get install -y --no-install-recommends \
     ccache \
     mc \
     nano \
+    screenfetch \
     ssh \
     sudo \
     wget
@@ -68,13 +70,14 @@ RUN useradd -ms /bin/bash $user && \
     mkdir -p /home/$user/bin && \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
     chmod a+x /home/$user/bin/repo && \
+    mkdir -p /home/$user/$scripts_dir && \
     mkdir -p /home/$user/$workdir/.ccache && \
     mkdir -p /home/$user/$workdir/out && \
     chown -R $user:$user /home/$user
 
-# Initialize environment variables
-ADD init-env-variables.sh /home/$user/init-env-variables.sh
-RUN echo ". ~/init-env-variables.sh" >> /home/$user/.profile
+# Initialize environment
+ADD include /home/$user/$scripts_dir
+RUN echo ". ~/$scripts_dir/init-environment.sh" >> /home/$user/.profile
 
 VOLUME /home/$user/android
 VOLUME /home/$user/android/.ccache

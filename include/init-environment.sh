@@ -6,3 +6,6 @@ if [ ! -f $CCACHE_DIR/ccache.conf ]; then
 	echo "Initializing ccache in $CCACHE_DIR..."
 	ccache -M 50G
 fi
+
+# Show general info
+screenfetch
