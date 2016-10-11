@@ -1,5 +1,8 @@
+# Fix ownership and permissions
+sudo chmod 775 $WORK_DIR $CCACHE_DIR $OUT_DIR
+sudo chown $USER:$USER $WORK_DIR $CCACHE_DIR $OUT_DIR
+
 export USE_CCACHE=1
-export CCACHE_DIR=$HOME/android/.ccache
 
 # Initialize ccache if needed
 if [ ! -f $CCACHE_DIR/ccache.conf ]; then

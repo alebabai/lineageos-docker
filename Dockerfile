@@ -78,19 +78,20 @@ RUN useradd -ms /bin/bash $USER && \
     echo "$USER ALL=NOPASSWD: ALL" > /etc/sudoers.d/$USER
 
 # Initialize environment
-ADD $external_dir $WORK_DIR
+ADD $external_dir $INIT_DIR
 RUN mkdir -p $USER_HOME/bin && \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
     chmod a+x $USER_HOME/bin/repo && \
     mkdir -p $CCACHE_DIR && \
     mkdir -p $OUT_DIR && \
+    chmod -R 775 $USER_HOME && \
     chown -R $USER:$USER $USER_HOME && \
-    echo ". $WORK_DIR/init-environment.sh" >> $USER_HOME/.profile
+    echo ". $INIT_DIR/init-environment.sh" >> $USER_HOME/.profile
 
 # Volumes defenition
+VOLUME $WORK_DIR
 VOLUME $CCACHE_DIR
 VOLUME $OUT_DIR
-VOLUME $WORK_DIR
 
 # Configure start up
 USER $USER
