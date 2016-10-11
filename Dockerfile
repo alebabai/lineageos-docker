@@ -3,13 +3,21 @@ MAINTAINER Alexander Babai <aliaksandr.babai@gmail.com>
 
 ENV DEBIAN_FRONTEND noninteractive
 
-# Args defenition
+# Arguments defenition
 ARG description="Docker image with CM build environment"
 ARG external_dir="include"
 ARG internal_dir=".init-cm"
 ARG user="docker-cm"
 ARG version="0.0-AURORA"
-ARG workdir="android"
+ARG work_dir="android"
+
+# Environment variables defenition (do not rearrange!)
+ENV USER=$user
+ENV USER_HOME=/home/$USER
+ENV WORK_DIR=$USER_HOME/$work_dir
+ENV CCACHE_DIR=$WORK_DIR/.ccache
+ENV INIT_DIR=$WORK_DIR/$internal_dir
+ENV OUT_DIR=$WORK_DIR/out
 
 # Metainformation
 LABEL description=$description \
@@ -66,23 +74,26 @@ RUN apt-get install -y --no-install-recommends \
     wget
 
 # Add new user
-RUN useradd -ms /bin/bash $user && \
-    echo "$user ALL=NOPASSWD: ALL" > /etc/sudoers.d/$user
+RUN useradd -ms /bin/bash $USER && \
+    echo "$USER ALL=NOPASSWD: ALL" > /etc/sudoers.d/$USER
 
 # Initialize environment
-ADD $external_dir /home/$user/$internal_dir
-RUN mkdir -p /home/$user/bin && \
+ADD $external_dir $WORK_DIR
+RUN mkdir -p $USER_HOME/bin && \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
-    chmod a+x /home/$user/bin/repo && \
-    mkdir -p /home/$user/$workdir/.ccache && \
-    mkdir -p /home/$user/$workdir/out && \
-    chown -R $user:$user /home/$user && \
-    echo ". ~/$internal_dir/init-environment.sh" >> /home/$user/.profile
+    chmod a+x $USER_HOME/bin/repo && \
+    mkdir -p $CCACHE_DIR && \
+    mkdir -p $OUT_DIR && \
+    chown -R $USER:$USER $USER_HOME && \
+    echo ". $WORK_DIR/init-environment.sh" >> $USER_HOME/.profile
 
 # Volumes defenition
-VOLUME /home/$user/android
-VOLUME /home/$user/android/.ccache
-VOLUME /home/$user/android/out
+VOLUME $CCACHE_DIR
+VOLUME $OUT_DIR
+VOLUME $WORK_DIR
 
-USER $user
-WORKDIR /home/$user/$workdir
+# Configure start up
+USER $USER
+WORKDIR $WORK_DIR
+ENTRYPOINT ["/bin/bash"]
+CMD ["-l"]
