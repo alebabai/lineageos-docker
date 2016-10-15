@@ -46,6 +46,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
     pngcrush \
     schedtool  \
     squashfs-tools \
+    unzip \
     xsltproc \
     zip \
     zlib1g-dev
@@ -92,6 +93,7 @@ RUN mkdir -p $USER_HOME/bin && \
 VOLUME $WORK_DIR
 VOLUME $CCACHE_DIR
 VOLUME $OUT_DIR
+VOLUME $SHARED_DIR
 
 # Configure start up
 USER $USER

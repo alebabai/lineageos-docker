@@ -1,6 +1,6 @@
 # Fix ownership and permissions
-sudo chmod 775 $WORK_DIR $CCACHE_DIR $OUT_DIR
-sudo chown $USER:$USER $WORK_DIR $CCACHE_DIR $OUT_DIR
+sudo chmod 775 $SHARED_DIR $WORK_DIR $CCACHE_DIR $OUT_DIR
+sudo chown $USER:$USER $SHARED_DIR $WORK_DIR $CCACHE_DIR $OUT_DIR
 
 export USE_CCACHE=1
 
