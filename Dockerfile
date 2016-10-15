@@ -28,6 +28,7 @@ LABEL description=$description \
 # Install commons build dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
+    bc \
     bison \
     build-essential \
     curl \
@@ -68,12 +69,17 @@ RUN apt-get install -y --no-install-recommends \
     android-tools-fastboot \
     android-tools-fsutils \
     bash-completion \
+    bsdmainutils \
     ccache \
+    file \
     mc \
     nano \
+    rsync \
+    screen \
     screenfetch \
     ssh \
     sudo \
+    tig \
     wget
 
 # Add new user
