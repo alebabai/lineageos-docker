@@ -18,7 +18,7 @@ ENV USER_HOME=/home/$USER
 ENV SHARED_DIR=$USER_HOME/$shared_dir
 ENV WORK_DIR=$USER_HOME/$work_dir
 ENV CCACHE_DIR=$WORK_DIR/.ccache
-ENV INIT_DIR=$WORK_DIR/$internal_dir
+ENV INIT_DIR=$USER_HOME/$internal_dir
 ENV OUT_DIR=$WORK_DIR/out
 
 # Metainformation
