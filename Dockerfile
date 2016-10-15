@@ -7,6 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 ARG description="Docker image with CM build environment"
 ARG external_dir="include"
 ARG internal_dir=".init-cm"
+ARG shared_dir="shared"
 ARG user="docker-cm"
 ARG version="0.0-AURORA"
 ARG work_dir="android"
@@ -14,6 +15,7 @@ ARG work_dir="android"
 # Environment variables defenition (do not rearrange!)
 ENV USER=$user
 ENV USER_HOME=/home/$USER
+ENV SHARED_DIR=$USER_HOME/$shared_dir
 ENV WORK_DIR=$USER_HOME/$work_dir
 ENV CCACHE_DIR=$WORK_DIR/.ccache
 ENV INIT_DIR=$WORK_DIR/$internal_dir
@@ -24,7 +26,7 @@ LABEL description=$description \
       version=$version
 
 # Install commons build dependencies
-RUN apt-get update && apt-get install -y --no-install-recommends\
+RUN apt-get update && apt-get install -y --no-install-recommends \
     apt-utils \
     bison \
     build-essential \
@@ -52,7 +54,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends\
     zlib1g-dev
 
 # Install build dependencies for 64-bit systems
-RUN apt-get install -y --no-install-recommends\
+RUN apt-get install -y --no-install-recommends \
     g++-multilib \
     gcc-multilib \
     lib32ncurses5-dev \
@@ -83,6 +85,7 @@ ADD $external_dir $INIT_DIR
 RUN mkdir -p $USER_HOME/bin && \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
     chmod a+x $USER_HOME/bin/repo && \
+    mkdir -p $SHARED_DIR && \
     mkdir -p $CCACHE_DIR && \
     mkdir -p $OUT_DIR && \
     chmod -R 775 $USER_HOME && \
@@ -90,10 +93,10 @@ RUN mkdir -p $USER_HOME/bin && \
     echo ". $INIT_DIR/init-environment.sh" >> $USER_HOME/.profile
 
 # Volumes defenition
+VOLUME $SHARED_DIR
 VOLUME $WORK_DIR
 VOLUME $CCACHE_DIR
 VOLUME $OUT_DIR
-VOLUME $SHARED_DIR
 
 # Configure start up
 USER $USER
