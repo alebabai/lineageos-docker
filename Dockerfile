@@ -1,5 +1,4 @@
 FROM ubuntu:16.04
-MAINTAINER Alexander Babai <aliaksandr.babai@gmail.com>
 
 # Metainformation
 LABEL name="lineageos-docker" \
@@ -59,14 +58,6 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     xsltproc \
     zip \
     zlib1g-dev
-
-# Install build dependencies for 64-bit systems
-RUN apt-get install -y --no-install-recommends \
-    g++-multilib \
-    gcc-multilib \
-    lib32ncurses5-dev \
-    lib32readline6-dev \
-    lib32z1-dev
 
 # Install additional useful stuff
 RUN apt-get install -y --no-install-recommends \
