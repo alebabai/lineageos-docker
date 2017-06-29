@@ -84,7 +84,7 @@ ADD $external_dir $INIT_DIR
 RUN mkdir -p $USER_HOME/bin && \
     curl https://storage.googleapis.com/git-repo-downloads/repo > /home/$user/bin/repo && \
     chmod a+x $USER_HOME/bin/repo && \
-    curl https://dl.google.com/android/repository/platform-tools-latest-linux.zip > $INIT_DIR && \
+    wget -P $INIT_DIR https://dl.google.com/android/repository/platform-tools-latest-linux.zip && \
     unzip $INIT_DIR/platform-tools-latest-linux.zip -d $INIT_DIR && \
     mkdir -p $SHARED_DIR && \
     mkdir -p $CCACHE_DIR && \
