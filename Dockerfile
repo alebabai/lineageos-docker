@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 
 # Metainformation
 LABEL name="lineageos-docker" \
-      maintainer="aliaksandr.babai@gmail.com"
+      maintainer="aliaksandr.babai@gmail.com" \
       version="0.3"
 
 ENV DEBIAN_FRONTEND noninteractive
