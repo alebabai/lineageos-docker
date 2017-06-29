@@ -1,3 +1,3 @@
-# Docker CyanogenMod builder
+# Lineage OS Docker BuildBox
 
-Docker image with CM build environment
+Docker image with LineageOS build environment
